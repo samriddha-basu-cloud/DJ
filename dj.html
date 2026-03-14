@@ -27,10 +27,10 @@ body::before{content:'';position:fixed;inset:-200%;width:400%;height:400%;backgr
 .brand .q{color:var(--magenta);text-shadow:0 0 20px rgba(255,0,170,0.5);}
 .brand .w{color:var(--cyan);text-shadow:0 0 20px rgba(0,245,255,0.4);}
 .brand-sub{font-family:'Share Tech Mono',monospace;font-size:.65rem;color:var(--muted2);letter-spacing:.15em;margin-bottom:40px;}
-.sup-badge{display:inline-block;padding:2px 8px;background:var(--magenta);color:#fff;font-family:'Share Tech Mono',monospace;font-size:.58rem;letter-spacing:.1em;border-radius:2px;vertical-align:middle;margin-left:6px;}
 .flbl{font-family:'Share Tech Mono',monospace;font-size:.6rem;color:var(--muted2);letter-spacing:.15em;text-transform:uppercase;margin-bottom:7px;display:block;}
 .finp{width:100%;padding:12px 15px;background:var(--card);border:1px solid var(--border2);border-radius:3px;color:var(--text);font-family:'Rajdhani',sans-serif;font-size:.95rem;font-weight:500;outline:none;transition:border-color .2s,box-shadow .2s;margin-bottom:16px;}
 .finp:focus{border-color:var(--magenta);box-shadow:0 0 0 2px rgba(255,0,170,0.07);}
+.finp::placeholder{color:var(--muted2);}
 .btn-go{width:100%;padding:13px;background:linear-gradient(135deg,var(--magenta),var(--cyan));color:#fff;border:none;border-radius:3px;font-family:'Orbitron',sans-serif;font-weight:700;font-size:.7rem;letter-spacing:.15em;cursor:none;transition:opacity .2s,transform .2s;}
 .btn-go:hover{opacity:.9;transform:translateY(-1px);}
 .hint{font-family:'Share Tech Mono',monospace;font-size:.62rem;color:var(--muted2);text-align:center;margin-top:12px;letter-spacing:.06em;}
@@ -58,7 +58,7 @@ nav{padding:0 20px;height:58px;display:flex;align-items:center;justify-content:s
 .tb.on{color:var(--magenta);border-bottom-color:var(--magenta);}
 
 /* PANES */
-.pane{display:none;padding:20px 16px 80px;max-width:860px;margin:0 auto;}
+.pane{display:none;padding:20px 16px 80px;max-width:900px;margin:0 auto;}
 .pane.on{display:block;}
 .prow{display:flex;align-items:flex-start;justify-content:space-between;gap:12px;margin-bottom:18px;flex-wrap:wrap;}
 .pt{font-family:'Orbitron',sans-serif;font-size:.95rem;font-weight:700;color:#fff;letter-spacing:.04em;}
@@ -70,12 +70,22 @@ nav{padding:0 20px;height:58px;display:flex;align-items:center;justify-content:s
 .ev-card:hover{border-color:rgba(255,0,170,0.3);}
 .ev-card:hover::before{transform:scaleY(1);}
 .ev-nm{font-family:'Orbitron',sans-serif;font-size:.82rem;font-weight:700;color:#fff;}
-.ev-mt{font-family:'Share Tech Mono',monospace;font-size:.6rem;color:var(--muted2);margin-top:4px;letter-spacing:.06em;}
+.ev-mt{font-family:'Share Tech Mono',monospace;font-size:.6rem;color:var(--muted2);margin-top:4px;letter-spacing:.06em;display:flex;align-items:center;gap:8px;flex-wrap:wrap;}
 .live-pip{display:inline-flex;align-items:center;gap:5px;font-family:'Share Tech Mono',monospace;font-size:.56rem;color:var(--lime);background:rgba(170,255,0,0.07);border:1px solid rgba(170,255,0,0.2);padding:2px 8px;border-radius:2px;}
 .pip-dot{width:5px;height:5px;border-radius:50%;background:var(--lime);animation:pip 1.2s ease-in-out infinite;}
 @keyframes pip{0%,100%{opacity:1}50%{opacity:.3}}
 .ended-pip{display:inline-flex;align-items:center;font-family:'Share Tech Mono',monospace;font-size:.56rem;color:var(--muted2);background:rgba(40,60,90,0.3);border:1px solid var(--border);padding:2px 8px;border-radius:2px;}
-.ev-acts{display:flex;gap:6px;flex-shrink:0;}
+.ev-acts{display:flex;gap:6px;flex-shrink:0;flex-wrap:wrap;}
+
+/* AUDIENCE BADGE */
+.aud-badge{display:inline-flex;align-items:center;gap:4px;font-family:'Share Tech Mono',monospace;font-size:.56rem;color:var(--cyan);background:rgba(0,245,255,0.06);border:1px solid rgba(0,245,255,0.15);padding:2px 8px;border-radius:2px;}
+
+/* SEARCH BAR */
+.search-wrap{position:relative;margin-bottom:16px;}
+.search-wrap input{width:100%;padding:11px 40px 11px 14px;background:var(--card);border:1px solid var(--border2);border-radius:3px;color:var(--text);font-family:'Rajdhani',sans-serif;font-size:.9rem;font-weight:500;outline:none;transition:border-color .2s;}
+.search-wrap input:focus{border-color:var(--magenta);}
+.search-wrap input::placeholder{color:var(--muted2);}
+.search-ico{position:absolute;right:12px;top:50%;transform:translateY(-50%);color:var(--muted2);pointer-events:none;font-size:.9rem;}
 
 /* BUTTONS */
 .btn{padding:7px 14px;border-radius:3px;font-family:'Share Tech Mono',monospace;font-size:.6rem;letter-spacing:.08em;cursor:none;border:none;transition:all .2s;text-transform:uppercase;}
@@ -120,18 +130,28 @@ nav{padding:0 20px;height:58px;display:flex;align-items:center;justify-content:s
 .vu{font-family:'Share Tech Mono',monospace;font-size:.7rem;color:var(--lime);}
 .vd{font-family:'Share Tech Mono',monospace;font-size:.7rem;color:var(--magenta);}
 .vsep{color:var(--border2);font-size:.8rem;}
-.qacts{display:flex;align-items:center;gap:5px;flex-shrink:0;flex-wrap:wrap;justify-content:flex-end;max-width:200px;}
+.qacts{display:flex;align-items:center;gap:5px;flex-shrink:0;flex-wrap:wrap;justify-content:flex-end;max-width:220px;}
 .chip{font-family:'Share Tech Mono',monospace;font-size:.54rem;letter-spacing:.08em;text-transform:uppercase;padding:3px 8px;border-radius:2px;white-space:nowrap;}
 .chip-p{background:rgba(170,255,0,0.1);color:var(--lime);border:1px solid rgba(170,255,0,0.25);}
 .chip-d{background:rgba(40,60,90,0.3);color:var(--muted2);border:1px solid var(--border);}
 
+/* QUEUE HEADER BAR */
+.q-header{display:flex;align-items:center;justify-content:space-between;gap:10px;margin-bottom:14px;flex-wrap:wrap;}
+.q-event-name{font-family:'Orbitron',sans-serif;font-size:.9rem;font-weight:700;color:var(--magenta);}
+.q-event-sub{font-family:'Share Tech Mono',monospace;font-size:.6rem;color:var(--muted2);letter-spacing:.08em;margin-top:2px;}
+.q-link-btn{display:inline-flex;align-items:center;gap:6px;padding:7px 13px;background:rgba(0,245,255,0.06);border:1px solid rgba(0,245,255,0.2);border-radius:3px;font-family:'Share Tech Mono',monospace;font-size:.6rem;color:var(--cyan);letter-spacing:.08em;cursor:none;transition:all .2s;}
+.q-link-btn:hover{background:rgba(0,245,255,0.12);border-color:var(--cyan);}
+
 /* MODAL */
-.modal-bg{display:none;position:fixed;inset:0;background:rgba(0,0,0,0.75);z-index:500;align-items:center;justify-content:center;backdrop-filter:blur(4px);}
+.modal-bg{display:none;position:fixed;inset:0;background:rgba(0,0,0,0.78);z-index:9990;align-items:center;justify-content:center;backdrop-filter:blur(6px);}
 .modal-bg.on{display:flex;}
-.modal{background:var(--card);border:1px solid var(--border2);border-radius:6px;padding:32px;width:min(420px,92vw);position:relative;}
-.modal::before{content:'';position:absolute;top:0;left:0;right:0;height:2px;background:linear-gradient(90deg,var(--magenta),var(--cyan));}
-.modal-title{font-family:'Orbitron',sans-serif;font-size:1.1rem;font-weight:900;color:#fff;margin-bottom:20px;letter-spacing:.04em;}
-.modal-acts{display:flex;gap:10px;margin-top:20px;justify-content:flex-end;}
+.modal{background:var(--card);border:1px solid var(--border2);border-radius:6px;padding:32px;width:min(460px,92vw);position:relative;}
+.modal::before{content:'';position:absolute;top:0;left:0;right:0;height:2px;background:linear-gradient(90deg,var(--magenta),var(--cyan));border-radius:6px 6px 0 0;}
+.modal-title{font-family:'Orbitron',sans-serif;font-size:1.05rem;font-weight:900;color:#fff;margin-bottom:6px;letter-spacing:.04em;}
+.modal-sub{font-family:'Share Tech Mono',monospace;font-size:.62rem;color:var(--muted2);letter-spacing:.1em;margin-bottom:22px;}
+.modal-acts{display:flex;gap:10px;margin-top:22px;justify-content:flex-end;}
+.form-row{display:grid;grid-template-columns:1fr 1fr;gap:12px;}
+@media(max-width:480px){.form-row{grid-template-columns:1fr;}}
 
 /* MISC */
 .spin-w{display:flex;justify-content:center;padding:40px;}
@@ -140,14 +160,15 @@ nav{padding:0 20px;height:58px;display:flex;align-items:center;justify-content:s
 .empty{text-align:center;padding:48px 20px;}
 .e-ico{font-size:2.2rem;margin-bottom:10px;}
 .e-msg{font-family:'Share Tech Mono',monospace;font-size:.68rem;color:var(--muted2);letter-spacing:.1em;}
-.toast{position:fixed;bottom:22px;left:50%;transform:translateX(-50%) translateY(80px);background:var(--card);border:1px solid var(--border2);border-radius:4px;padding:10px 20px;font-family:'Share Tech Mono',monospace;font-size:.7rem;letter-spacing:.08em;z-index:9999;transition:transform .3s;white-space:nowrap;}
+.divider{display:flex;align-items:center;gap:10px;margin:20px 0 14px;}
+.divider-line{flex:1;height:1px;background:var(--border);}
+.divider-lbl{font-family:'Share Tech Mono',monospace;font-size:.58rem;color:var(--muted2);letter-spacing:.12em;white-space:nowrap;}
+.toast{position:fixed;bottom:22px;left:50%;transform:translateX(-50%) translateY(80px);background:var(--card);border:1px solid var(--border2);border-radius:4px;padding:10px 22px;font-family:'Share Tech Mono',monospace;font-size:.7rem;letter-spacing:.08em;z-index:9999;transition:transform .3s;white-space:nowrap;}
 .toast.show{transform:translateX(-50%) translateY(0);}
 .toast.ok{border-color:var(--lime);color:var(--lime);}
 .toast.err{border-color:var(--red);color:var(--red);}
-.section-line{display:flex;align-items:center;gap:10px;margin:20px 0 14px;}
-.sl-label{font-family:'Share Tech Mono',monospace;font-size:.6rem;color:var(--muted2);letter-spacing:.12em;white-space:nowrap;}
-.sl-line{flex:1;height:1px;background:var(--border);}
-@media(max-width:600px){.stats-row{grid-template-columns:repeat(2,1fr);}.qacts{max-width:none;}}
+.toast.info{border-color:var(--cyan);color:var(--cyan);}
+@media(max-width:600px){.stats-row{grid-template-columns:repeat(2,1fr);}.qacts{max-width:none;}.votes-box{display:none;}}
 </style>
 </head>
 <body>
@@ -162,10 +183,10 @@ nav{padding:0 20px;height:58px;display:flex;align-items:center;justify-content:s
     <label class="flbl">DJ Name</label>
     <input class="finp" type="text" id="djName" placeholder="Your DJ handle" maxlength="40">
     <label class="flbl">Password</label>
-    <input class="finp" type="password" id="djPass" placeholder="••••••••" onkeydown="if(event.key==='Enter')djLogin()">
-    <button class="btn-go" onclick="djLogin()">ACCESS DASHBOARD →</button>
+    <input class="finp" type="password" id="djPass" placeholder="••••••••" id="djPass">
+    <button class="btn-go" id="loginBtn">ACCESS DASHBOARD →</button>
     <p class="hint">First time? Your account is created automatically.</p>
-    <button class="back-lnk" onclick="location.href='audience.html'">← AUDIENCE VIEW</button>
+    <button class="back-lnk" id="backToAud">← AUDIENCE VIEW</button>
   </div>
 </div>
 
@@ -178,45 +199,64 @@ nav{padding:0 20px;height:58px;display:flex;align-items:center;justify-content:s
         <div class="dj-av" id="djAv">?</div>
         <span class="dj-nm" id="djDisp">—</span>
       </div>
-      <button class="n-btn" onclick="djLogout()">LOGOUT</button>
+      <button class="n-btn" id="logoutBtn">LOGOUT</button>
     </div>
   </nav>
   <div class="tabs">
-    <button class="tb on" id="t-events" onclick="goTab('events')">MY EVENTS</button>
-    <button class="tb" id="t-queue" onclick="goTab('queue')">QUEUE</button>
+    <button class="tb on" id="t-events">MY EVENTS</button>
+    <button class="tb" id="t-queue">QUEUE</button>
   </div>
 
+  <!-- EVENTS PANE -->
   <div class="pane on" id="p-events">
     <div class="prow">
       <div><div class="pt">MY EVENTS</div><div class="ps">// create and manage your dj sessions</div></div>
-      <button class="btn-new" onclick="openModal('newEvModal')">+ NEW EVENT</button>
+      <button class="btn-new" id="newEventBtn">+ NEW EVENT</button>
+    </div>
+    <div class="search-wrap">
+      <input type="text" id="evSearch" placeholder="Search events…">
+      <span class="search-ico">⌕</span>
     </div>
     <div id="evList"></div>
   </div>
 
+  <!-- QUEUE PANE -->
   <div class="pane" id="p-queue">
-    <div class="prow">
-      <div><div class="pt" id="qEvTitle">QUEUE</div><div class="ps" id="qEvSub">// select an event first</div></div>
+    <div class="q-header">
+      <div>
+        <div class="q-event-name" id="qEvTitle">—</div>
+        <div class="q-event-sub" id="qEvSub">// select an event to manage its queue</div>
+      </div>
+      <button class="q-link-btn" id="copyLinkBtn" style="display:none">📋 COPY AUDIENCE LINK</button>
     </div>
     <div class="stats-row" id="statsRow" style="display:none">
       <div class="stat-box"><div class="stat-num" id="st-queued">0</div><div class="stat-lbl">QUEUED</div></div>
       <div class="stat-box"><div class="stat-num" id="st-playing">0</div><div class="stat-lbl">PLAYING</div></div>
       <div class="stat-box"><div class="stat-num" id="st-played">0</div><div class="stat-lbl">PLAYED</div></div>
-      <div class="stat-box"><div class="stat-num" id="st-total">0</div><div class="stat-lbl">TOTAL</div></div>
+      <div class="stat-box"><div class="stat-num" id="st-total">0</div><div class="stat-lbl">TOTAL SONGS</div></div>
     </div>
     <div id="qList"></div>
   </div>
 </div>
 
-<!-- NEW EVENT MODAL -->
+<!-- NEW EVENT MODAL — outside mainApp, high z-index -->
 <div class="modal-bg" id="newEvModal">
   <div class="modal">
     <div class="modal-title">CREATE NEW EVENT</div>
-    <label class="flbl">Event Name</label>
-    <input class="finp" type="text" id="evNameIn" placeholder="e.g. Friday Night Bash" style="margin-bottom:0">
+    <div class="modal-sub">// fill in the details below</div>
+    <div class="form-row">
+      <div>
+        <label class="flbl">Event Name *</label>
+        <input class="finp" type="text" id="evNameIn" placeholder="e.g. Friday Night Bash" style="margin-bottom:0">
+      </div>
+      <div>
+        <label class="flbl">Venue (optional)</label>
+        <input class="finp" type="text" id="evVenueIn" placeholder="e.g. Club Zodiac" style="margin-bottom:0">
+      </div>
+    </div>
     <div class="modal-acts">
-      <button class="btn btn-g" onclick="closeModal('newEvModal')">Cancel</button>
-      <button class="btn btn-m" onclick="createEvent()">CREATE →</button>
+      <button class="btn btn-g" id="modalCancelBtn">CANCEL</button>
+      <button class="btn btn-m" id="modalCreateBtn">CREATE EVENT →</button>
     </div>
   </div>
 </div>
@@ -225,9 +265,13 @@ nav{padding:0 20px;height:58px;display:flex;align-items:center;justify-content:s
 
 <script type="module">
 import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-app.js";
-import { getFirestore, collection, doc, setDoc, getDoc, addDoc, getDocs, deleteDoc, onSnapshot, updateDoc, query, orderBy, serverTimestamp, where } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js";
+import {
+  getFirestore, collection, doc, setDoc, getDoc, addDoc,
+  getDocs, deleteDoc, onSnapshot, updateDoc, query,
+  orderBy, serverTimestamp, where
+} from "https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js";
 
-// ── PASTE YOUR FIREBASE CONFIG ──
+// ── YOUR FIREBASE CONFIG ──────────────────────────────────
 const firebaseConfig = {
     apiKey: "AIzaSyAseFAn83wwnnnxTbNkLetiBDrwsrJj0AM",
     authDomain: "dj-app-cb03f.firebaseapp.com",
@@ -237,166 +281,375 @@ const firebaseConfig = {
     appId: "1:377882282531:web:53565cb5e44b96b2e33f96",
     measurementId: "G-EY08TTYJBZ"
 };
-// ────────────────────────────────
+// ─────────────────────────────────────────────────────────
 
-const app=initializeApp(firebaseConfig),db=getFirestore(app);
-let dj=null,activeEvt=null,qUnsub=null;
+const app = initializeApp(firebaseConfig);
+const db  = getFirestore(app);
 
-// CURSOR
-const cur=document.getElementById('cur'),cr=document.getElementById('cur-r');
+let dj = null, activeEvt = null, qUnsub = null, allEvents = [];
+
+// ── CURSOR ──────────────────────────────────────────────
+const cur = document.getElementById('cur'), cr = document.getElementById('cur-r');
 let mx=0,my=0,rx=0,ry=0;
-document.addEventListener('mousemove',e=>{mx=e.clientX;my=e.clientY;cur.style.left=mx+'px';cur.style.top=my+'px';});
-(function ar(){rx+=(mx-rx)*.12;ry+=(my-ry)*.12;cr.style.left=rx+'px';cr.style.top=ry+'px';requestAnimationFrame(ar);})();
+document.addEventListener('mousemove', e => {
+  mx = e.clientX; my = e.clientY;
+  cur.style.left = mx+'px'; cur.style.top = my+'px';
+});
+(function ar(){ rx+=(mx-rx)*.12; ry+=(my-ry)*.12; cr.style.left=rx+'px'; cr.style.top=ry+'px'; requestAnimationFrame(ar); })();
 
-// GRID (magenta tint for DJ)
-const gc=document.getElementById('gc'),gx=gc.getContext('2d');
-function rsz(){gc.width=window.innerWidth;gc.height=window.innerHeight;}rsz();window.addEventListener('resize',rsz);
+// ── GRID ────────────────────────────────────────────────
+const gc=document.getElementById('gc'), gx=gc.getContext('2d');
+function rsz(){ gc.width=window.innerWidth; gc.height=window.innerHeight; }
+rsz(); window.addEventListener('resize', rsz);
 let gt=0;
-(function dg(){gx.clearRect(0,0,gc.width,gc.height);const sz=60,cols=Math.ceil(gc.width/sz)+1,rows=Math.ceil(gc.height/sz)+1;const ox=(gt*.25)%sz,oy=(gt*.12)%sz;gx.lineWidth=.5;for(let x=0;x<cols;x++){const px=x*sz-ox;gx.strokeStyle=`rgba(255,0,170,${.04+Math.sin(gt*.02+x*.3)*.016})`;gx.beginPath();gx.moveTo(px,0);gx.lineTo(px,gc.height);gx.stroke();}for(let y=0;y<rows;y++){const py=y*sz-oy;gx.strokeStyle=`rgba(0,245,255,${.025+Math.sin(gt*.02+y*.4)*.01})`;gx.beginPath();gx.moveTo(0,py);gx.lineTo(gc.width,py);gx.stroke();}gt++;requestAnimationFrame(dg);})();
+(function dg(){
+  gx.clearRect(0,0,gc.width,gc.height);
+  const sz=60, cols=Math.ceil(gc.width/sz)+1, rows=Math.ceil(gc.height/sz)+1;
+  const ox=(gt*.25)%sz, oy=(gt*.12)%sz;
+  gx.lineWidth=.5;
+  for(let x=0;x<cols;x++){ const px=x*sz-ox; gx.strokeStyle=`rgba(255,0,170,${.04+Math.sin(gt*.02+x*.3)*.016})`; gx.beginPath(); gx.moveTo(px,0); gx.lineTo(px,gc.height); gx.stroke(); }
+  for(let y=0;y<rows;y++){ const py=y*sz-oy; gx.strokeStyle=`rgba(0,245,255,${.025+Math.sin(gt*.02+y*.4)*.01})`; gx.beginPath(); gx.moveTo(0,py); gx.lineTo(gc.width,py); gx.stroke(); }
+  gt++; requestAnimationFrame(dg);
+})();
 
-window.showS=id=>{document.querySelectorAll('.screen').forEach(s=>s.classList.remove('on'));document.getElementById(id)?.classList.add('on');};
-function toast(msg,type='ok',ms=2500){const t=document.getElementById('toast');t.textContent=msg;t.className='toast show '+type;setTimeout(()=>t.className='toast',ms);}
+// ── HELPERS ─────────────────────────────────────────────
+function toast(msg, type='ok', ms=2800) {
+  const t = document.getElementById('toast');
+  t.textContent = msg; t.className = 'toast show '+type;
+  setTimeout(() => t.className='toast', ms);
+}
+function showTab(t) {
+  document.querySelectorAll('.tb').forEach(e=>e.classList.remove('on'));
+  document.querySelectorAll('.pane').forEach(e=>e.classList.remove('on'));
+  document.getElementById('t-'+t).classList.add('on');
+  document.getElementById('p-'+t).classList.add('on');
+}
 
-// AUTH
-window.djLogin=async()=>{
-  const name=document.getElementById('djName').value.trim();
-  const pass=document.getElementById('djPass').value;
-  if(!name||!pass)return toast('Enter DJ name and password','err');
-  const id=name.toLowerCase().replace(/\s+/g,'_');
-  const ref=doc(db,'djs',id);
-  const snap=await getDoc(ref);
-  if(!snap.exists()){
-    await setDoc(ref,{name,password:btoa(pass),createdAt:serverTimestamp()});
-    dj={id,name};
-  }else{
-    if(atob(snap.data().password)!==pass)return toast('Wrong password','err');
-    dj={id,name:snap.data().name};
+// ── EVENT LISTENERS (no inline onclick — this is the fix) ──
+document.getElementById('loginBtn').addEventListener('click', djLogin);
+document.getElementById('djPass').addEventListener('keydown', e => { if(e.key==='Enter') djLogin(); });
+document.getElementById('logoutBtn').addEventListener('click', djLogout);
+document.getElementById('backToAud').addEventListener('click', () => location.href='audience.html');
+document.getElementById('t-events').addEventListener('click', () => showTab('events'));
+document.getElementById('t-queue').addEventListener('click', () => showTab('queue'));
+document.getElementById('newEventBtn').addEventListener('click', () => {
+  document.getElementById('evNameIn').value='';
+  document.getElementById('evVenueIn').value='';
+  document.getElementById('newEvModal').classList.add('on');
+  setTimeout(() => document.getElementById('evNameIn').focus(), 100);
+});
+document.getElementById('modalCancelBtn').addEventListener('click', () => document.getElementById('newEvModal').classList.remove('on'));
+document.getElementById('modalCreateBtn').addEventListener('click', createEvent);
+document.getElementById('evNameIn').addEventListener('keydown', e => { if(e.key==='Enter') createEvent(); });
+document.getElementById('evSearch').addEventListener('input', e => renderEventList(e.target.value.trim().toLowerCase()));
+document.getElementById('copyLinkBtn').addEventListener('click', () => {
+  const url = location.origin + '/audience.html';
+  navigator.clipboard.writeText(url).then(() => toast('📋 Audience link copied!','info')).catch(() => toast(url,'info', 5000));
+});
+
+// Close modal on backdrop click
+document.getElementById('newEvModal').addEventListener('click', function(e) {
+  if(e.target === this) this.classList.remove('on');
+});
+
+// ── AUTH ─────────────────────────────────────────────────
+async function djLogin() {
+  const name = document.getElementById('djName').value.trim();
+  const pass = document.getElementById('djPass').value;
+  if(!name||!pass) return toast('Enter DJ name and password','err');
+
+  const btn = document.getElementById('loginBtn');
+  btn.textContent='VERIFYING...'; btn.disabled=true;
+
+  try {
+    const id  = name.toLowerCase().replace(/\s+/g,'_');
+    const ref = doc(db,'djs',id);
+    const snap= await getDoc(ref);
+
+    if(!snap.exists()) {
+      await setDoc(ref, { name, password: btoa(unescape(encodeURIComponent(pass))), createdAt: serverTimestamp() });
+      dj = { id, name };
+      toast('Account created! Welcome, '+name,'ok');
+    } else {
+      const stored = decodeURIComponent(escape(atob(snap.data().password)));
+      if(stored !== pass) {
+        btn.textContent='ACCESS DASHBOARD →'; btn.disabled=false;
+        return toast('Wrong password','err');
+      }
+      dj = { id, name: snap.data().name };
+    }
+
+    document.getElementById('mainApp').style.display='block';
+    document.getElementById('s-login').classList.remove('on');
+    document.getElementById('djDisp').textContent = dj.name;
+    document.getElementById('djAv').textContent = dj.name[0].toUpperCase();
+    loadEvents();
+  } catch(err) {
+    console.error(err);
+    toast('Connection error: '+err.message,'err',4000);
+  } finally {
+    btn.textContent='ACCESS DASHBOARD →'; btn.disabled=false;
   }
-  document.getElementById('mainApp').style.display='block';
-  document.querySelectorAll('.screen').forEach(s=>s.classList.remove('on'));
-  document.getElementById('djDisp').textContent=dj.name;
-  document.getElementById('djAv').textContent=dj.name[0].toUpperCase();
-  loadEvents();
-};
-window.djLogout=()=>{if(qUnsub)qUnsub();dj=activeEvt=null;document.getElementById('mainApp').style.display='none';showS('s-login');};
+}
 
-// EVENTS
-async function loadEvents(){
-  const el=document.getElementById('evList');
+function djLogout() {
+  if(qUnsub) qUnsub();
+  dj = activeEvt = null; allEvents = [];
+  document.getElementById('mainApp').style.display='none';
+  document.getElementById('s-login').classList.add('on');
+}
+
+// ── EVENTS ───────────────────────────────────────────────
+async function loadEvents() {
+  const el = document.getElementById('evList');
   el.innerHTML='<div class="spin-w"><div class="spin"></div></div>';
-  const snap=await getDocs(query(collection(db,'events'),where('djId','==',dj.id)));
-  const evs=[];snap.forEach(d=>evs.push({id:d.id,...d.data()}));
-  evs.sort((a,b)=>(b.createdAt?.seconds||0)-(a.createdAt?.seconds||0));
-  if(!evs.length){el.innerHTML='<div class="empty"><div class="e-ico">🎵</div><div class="e-msg">NO EVENTS YET — CREATE ONE!</div></div>';return;}
+  try {
+    const snap = await getDocs(query(collection(db,'events'), where('djId','==',dj.id)));
+    allEvents = [];
+    snap.forEach(d => allEvents.push({ id:d.id, ...d.data() }));
+    allEvents.sort((a,b) => (b.createdAt?.seconds||0)-(a.createdAt?.seconds||0));
+    renderEventList('');
+  } catch(err) {
+    el.innerHTML=`<div class="empty"><div class="e-ico">⚠️</div><div class="e-msg">LOAD FAILED: ${err.message}</div></div>`;
+    console.error(err);
+  }
+}
+
+function renderEventList(filter) {
+  const el = document.getElementById('evList');
+  const evs = filter ? allEvents.filter(e => e.name.toLowerCase().includes(filter) || (e.venue||'').toLowerCase().includes(filter)) : allEvents;
+  if(!evs.length) {
+    el.innerHTML=filter
+      ? '<div class="empty"><div class="e-ico">🔍</div><div class="e-msg">NO MATCHING EVENTS</div></div>'
+      : '<div class="empty"><div class="e-ico">🎵</div><div class="e-msg">NO EVENTS YET — CREATE ONE!</div></div>';
+    return;
+  }
   el.innerHTML='';
-  evs.forEach(ev=>{
-    const isLive=ev.status==='live';
-    const c=document.createElement('div');c.className='ev-card';
-    c.innerHTML=`<div style="flex:1;min-width:0;">
+  evs.forEach(ev => {
+    const isLive = ev.status==='live';
+    const c = document.createElement('div'); c.className='ev-card';
+    c.innerHTML=`
+      <div style="flex:1;min-width:0;">
         <div class="ev-nm">${ev.name}</div>
-        <div class="ev-mt">${isLive?`<span class="live-pip"><span class="pip-dot"></span>LIVE</span>`:`<span class="ended-pip">ENDED</span>`}</div>
+        <div class="ev-mt">
+          ${isLive
+            ? `<span class="live-pip"><span class="pip-dot"></span>LIVE</span>`
+            : `<span class="ended-pip">ENDED</span>`}
+          ${ev.venue ? `<span style="font-family:'Share Tech Mono',monospace;font-size:.56rem;color:var(--muted2)">📍 ${ev.venue}</span>` : ''}
+        </div>
       </div>
       <div class="ev-acts">
-        <button class="btn btn-sm btn-g" onclick="openQueue('${ev.id}','${ev.name}')">QUEUE</button>
+        <button class="btn btn-sm btn-c" data-action="queue" data-id="${ev.id}" data-name="${ev.name.replace(/"/g,'&quot;')}">QUEUE</button>
         ${isLive
-          ?`<button class="btn btn-sm btn-r" onclick="endEvent('${ev.id}')">END</button>`
-          :`<button class="btn btn-sm btn-l" onclick="goLive('${ev.id}')">GO LIVE</button>`}
+          ? `<button class="btn btn-sm btn-r" data-action="end" data-id="${ev.id}">END</button>`
+          : `<button class="btn btn-sm btn-l" data-action="live" data-id="${ev.id}">GO LIVE</button>`}
       </div>`;
     el.appendChild(c);
   });
-}
 
-window.openModal=id=>{document.getElementById(id).classList.add('on');};
-window.closeModal=id=>{document.getElementById(id).classList.remove('on');};
-
-window.createEvent=async()=>{
-  const name=document.getElementById('evNameIn').value.trim();
-  if(!name)return toast('Enter event name','err');
-  await addDoc(collection(db,'events'),{name,djId:dj.id,djName:dj.name,status:'live',createdAt:serverTimestamp()});
-  document.getElementById('evNameIn').value='';
-  closeModal('newEvModal');toast('Event created! 🎉');loadEvents();
-};
-window.goLive=async id=>{await updateDoc(doc(db,'events',id),{status:'live'});toast('Event is live!');loadEvents();};
-window.endEvent=async id=>{
-  if(!confirm('End this event?'))return;
-  await updateDoc(doc(db,'events',id),{status:'ended'});
-  if(activeEvt?.id===id){if(qUnsub)qUnsub();activeEvt=null;}
-  toast('Event ended');loadEvents();
-};
-
-// QUEUE
-window.openQueue=(evId,evName)=>{
-  activeEvt={id:evId,name:evName};
-  document.getElementById('qEvTitle').textContent=evName;
-  document.getElementById('qEvSub').textContent='// live queue management';
-  document.getElementById('statsRow').style.display='grid';
-  goTab('queue');subQ();
-};
-window.goTab=t=>{
-  document.querySelectorAll('.tb').forEach(e=>e.classList.remove('on'));
-  document.querySelectorAll('.pane').forEach(e=>e.classList.remove('on'));
-  document.getElementById('t-'+t)?.classList.add('on');
-  document.getElementById('p-'+t)?.classList.add('on');
-};
-function subQ(){
-  if(qUnsub)qUnsub();
-  const q=query(collection(db,'events',activeEvt.id,'queue'),orderBy('rank'));
-  qUnsub=onSnapshot(q,snap=>{
-    const data=[];snap.forEach(d=>data.push({id:d.id,...d.data()}));
-    renderQ(data);updateStats(data);
+  // Delegate click — avoids all onclick= issues
+  el.querySelectorAll('[data-action]').forEach(btn => {
+    btn.addEventListener('click', e => {
+      const action = btn.dataset.action, id = btn.dataset.id, name = btn.dataset.name;
+      if(action==='queue') openQueue(id, name);
+      if(action==='end')   endEvent(id);
+      if(action==='live')  goLive(id);
+    });
   });
 }
-function updateStats(data){
-  document.getElementById('st-queued').textContent=data.filter(s=>s.status==='queued').length;
-  document.getElementById('st-playing').textContent=data.filter(s=>s.status==='playing').length;
-  document.getElementById('st-played').textContent=data.filter(s=>s.status==='played').length;
-  document.getElementById('st-total').textContent=data.length;
+
+async function createEvent() {
+  const name  = document.getElementById('evNameIn').value.trim();
+  const venue = document.getElementById('evVenueIn').value.trim();
+  if(!name) { toast('Enter event name','err'); document.getElementById('evNameIn').focus(); return; }
+
+  const btn = document.getElementById('modalCreateBtn');
+  btn.textContent='CREATING...'; btn.disabled=true;
+
+  try {
+    await addDoc(collection(db,'events'), {
+      name, venue: venue||'', djId: dj.id, djName: dj.name,
+      status: 'live', createdAt: serverTimestamp()
+    });
+    document.getElementById('evNameIn').value='';
+    document.getElementById('evVenueIn').value='';
+    document.getElementById('newEvModal').classList.remove('on');
+    toast('🎉 Event created: '+name);
+    await loadEvents();
+  } catch(err) {
+    console.error(err);
+    toast('Failed: '+err.message,'err',4000);
+  } finally {
+    btn.textContent='CREATE EVENT →'; btn.disabled=false;
+  }
 }
-function renderQ(data){
-  const el=document.getElementById('qList');
-  if(!data.length){el.innerHTML='<div class="empty"><div class="e-ico">🎤</div><div class="e-msg">QUEUE EMPTY</div></div>';return;}
-  el.innerHTML='';let n=1;
-  data.forEach((s,idx)=>{
-    const ip=s.status==='playing',id=s.status==='played';
-    const c=document.createElement('div');c.className='qc'+(ip?' playing':id?' played':'');
-    const rankDisp=ip?'▶':id?'✓':`#${n++}`;
-    const rankCls=ip?'rp':id?'rd':'';
-    c.innerHTML=`<div class="rank-n ${rankCls}">${rankDisp}</div>
+
+async function goLive(id) {
+  await updateDoc(doc(db,'events',id), { status:'live' });
+  toast('Event is live!'); loadEvents();
+}
+
+async function endEvent(id) {
+  const ev = allEvents.find(e=>e.id===id);
+  const evName = ev?.name || 'this event';
+  // Count active songs
+  const qSnap = await getDocs(collection(db,'events',id,'queue'));
+  const activeCount = qSnap.docs.filter(d=>d.data().status!=='played').length;
+  const msg = activeCount>0
+    ? `End "${evName}"? There are still ${activeCount} song(s) in queue.`
+    : `End "${evName}"?`;
+  if(!confirm(msg)) return;
+  await updateDoc(doc(db,'events',id), { status:'ended' });
+  if(activeEvt?.id===id) { if(qUnsub) qUnsub(); activeEvt=null; }
+  toast('Event ended'); loadEvents();
+}
+
+// ── QUEUE ─────────────────────────────────────────────────
+function openQueue(evId, evName) {
+  activeEvt = { id:evId, name:evName };
+  document.getElementById('qEvTitle').textContent = evName;
+  document.getElementById('qEvSub').textContent = '// live queue management';
+  document.getElementById('statsRow').style.display='grid';
+  document.getElementById('copyLinkBtn').style.display='inline-flex';
+  showTab('queue');
+  subQ();
+}
+
+function subQ() {
+  if(qUnsub) qUnsub();
+  const q = query(collection(db,'events',activeEvt.id,'queue'), orderBy('rank'));
+  qUnsub = onSnapshot(q, snap => {
+    const data = [];
+    snap.forEach(d => data.push({ id:d.id, ...d.data() }));
+    renderQ(data);
+    updateStats(data);
+  }, err => {
+    console.error('Queue listener error:', err);
+    toast('Queue error: '+err.message,'err');
+  });
+}
+
+function updateStats(data) {
+  document.getElementById('st-queued').textContent  = data.filter(s=>s.status==='queued').length;
+  document.getElementById('st-playing').textContent = data.filter(s=>s.status==='playing').length;
+  document.getElementById('st-played').textContent  = data.filter(s=>s.status==='played').length;
+  document.getElementById('st-total').textContent   = data.length;
+}
+
+function renderQ(data) {
+  const el = document.getElementById('qList');
+  if(!data.length) {
+    el.innerHTML='<div class="empty"><div class="e-ico">🎤</div><div class="e-msg">QUEUE EMPTY — WAITING FOR REQUESTS</div></div>';
+    return;
+  }
+  el.innerHTML=''; let n=1;
+  data.forEach((s, idx) => {
+    const ip=s.status==='playing', id=s.status==='played';
+    const c = document.createElement('div');
+    c.className = 'qc'+(ip?' playing':id?' played':'');
+    const rankDisp = ip?'▶':id?'✓':`#${n++}`;
+    const rankCls  = ip?'rp':id?'rd':'';
+
+    // Build actions div separately — NO inline onclick
+    c.innerHTML=`
+      <div class="rank-n ${rankCls}">${rankDisp}</div>
       <img class="qthumb" src="${s.artwork||''}" loading="lazy" onerror="this.style.background='var(--surface)'">
       <div class="qinfo">
         <div class="qt">${s.title}</div>
         <div class="qa">${s.artist}</div>
         <div class="qr">req. ${s.requestedBy||'—'}</div>
       </div>
-      <div class="votes-box"><span class="vu">👍 ${s.upvotes||0}</span><span class="vsep">|</span><span class="vd">👎 ${s.downvotes||0}</span></div>
-      <div class="qacts">
-        ${ip?`<span class="chip chip-p">▶ PLAYING</span>`:''}
-        ${id?`<span class="chip chip-d">✓ PLAYED</span>`:''}
-        ${!id&&!ip?`<button class="btn btn-sm btn-l" onclick="markStatus('${s.id}','playing')">▶ PLAY</button>`:''}
-        ${!id?`<button class="btn btn-sm btn-g" onclick="markStatus('${s.id}','played')">✓ PLAYED</button>`:''}
-        ${!id&&idx>0?`<button class="btn btn-sm btn-g" onclick="moveUp('${s.id}',${s.rank},${data[idx-1].rank})">↑</button>`:''}
-        ${!id&&idx<data.length-1&&data[idx+1].status!=='played'?`<button class="btn btn-sm btn-g" onclick="moveDn('${s.id}',${s.rank},${data[idx+1].rank})">↓</button>`:''}
-        <button class="btn btn-sm btn-r" onclick="removeSong('${s.id}')">✕</button>
-      </div>`;
+      <div class="votes-box">
+        <span class="vu">👍 ${s.upvotes||0}</span>
+        <span class="vsep">|</span>
+        <span class="vd">👎 ${s.downvotes||0}</span>
+      </div>
+      <div class="qacts" id="acts-${s.id}"></div>`;
+
     el.appendChild(c);
+
+    // Build action buttons and attach event listeners
+    const acts = c.querySelector(`#acts-${s.id}`);
+    if(ip) acts.innerHTML += `<span class="chip chip-p">▶ PLAYING</span>`;
+    if(id) acts.innerHTML += `<span class="chip chip-d">✓ PLAYED</span>`;
+
+    if(!id && !ip) {
+      const playBtn = document.createElement('button');
+      playBtn.className='btn btn-sm btn-l'; playBtn.textContent='▶ PLAY';
+      playBtn.addEventListener('click', () => markStatus(s.id,'playing'));
+      acts.appendChild(playBtn);
+    }
+    if(!id) {
+      const doneBtn = document.createElement('button');
+      doneBtn.className='btn btn-sm btn-g'; doneBtn.textContent='✓ PLAYED';
+      doneBtn.addEventListener('click', () => markStatus(s.id,'played'));
+      acts.appendChild(doneBtn);
+    }
+    if(!id && idx>0 && data[idx-1].status!=='played') {
+      const upBtn = document.createElement('button');
+      upBtn.className='btn btn-sm btn-g'; upBtn.textContent='↑';
+      upBtn.addEventListener('click', () => moveRank(s.id, s.rank, data[idx-1].rank, -1));
+      acts.appendChild(upBtn);
+    }
+    if(!id && idx<data.length-1 && data[idx+1].status!=='played') {
+      const dnBtn = document.createElement('button');
+      dnBtn.className='btn btn-sm btn-g'; dnBtn.textContent='↓';
+      dnBtn.addEventListener('click', () => moveRank(s.id, s.rank, data[idx+1].rank, 1));
+      acts.appendChild(dnBtn);
+    }
+    const rmBtn = document.createElement('button');
+    rmBtn.className='btn btn-sm btn-r'; rmBtn.textContent='✕';
+    rmBtn.addEventListener('click', () => removeSong(s.id, s.title));
+    acts.appendChild(rmBtn);
   });
 }
-window.markStatus=async(sid,status)=>{
-  const ref=doc(db,'events',activeEvt.id,'queue',sid);
-  if(status==='playing'){
-    const snap=await getDocs(collection(db,'events',activeEvt.id,'queue'));
-    const batch=[];snap.forEach(d=>{if(d.data().status==='playing')batch.push(updateDoc(doc(db,'events',activeEvt.id,'queue',d.id),{status:'queued'}));});
-    await Promise.all(batch);
+
+async function markStatus(sid, status) {
+  try {
+    if(status==='playing') {
+      const snap = await getDocs(collection(db,'events',activeEvt.id,'queue'));
+      const batch = [];
+      snap.forEach(d => { if(d.data().status==='playing') batch.push(updateDoc(doc(db,'events',activeEvt.id,'queue',d.id),{status:'queued'})); });
+      await Promise.all(batch);
+    }
+    await updateDoc(doc(db,'events',activeEvt.id,'queue',sid), { status });
+    toast(status==='playing'?'▶ Now Playing!':'✓ Marked as played');
+  } catch(err) {
+    toast('Error: '+err.message,'err'); console.error(err);
   }
-  await updateDoc(ref,{status});
-  toast(status==='playing'?'▶ Now Playing!':'✓ Marked as played');
-};
-window.moveUp=async(sid,myRank,prevRank)=>{await updateDoc(doc(db,'events',activeEvt.id,'queue',sid),{rank:prevRank-1});};
-window.moveDn=async(sid,myRank,nextRank)=>{await updateDoc(doc(db,'events',activeEvt.id,'queue',sid),{rank:nextRank+1});};
-window.removeSong=async sid=>{
-  if(!confirm('Remove this song?'))return;
-  await deleteDoc(doc(db,'events',activeEvt.id,'queue',sid));toast('Song removed');
-};
+}
+
+async function moveRank(sid, myRank, swapRank, dir) {
+  try {
+    // Swap ranks so ordering is stable
+    const myRef   = doc(db,'events',activeEvt.id,'queue',sid);
+    const swapDoc = await getDocs(query(collection(db,'events',activeEvt.id,'queue'), orderBy('rank')));
+    // find the song at swapRank
+    let swapId = null;
+    swapDoc.forEach(d => { if(d.data().rank===swapRank) swapId=d.id; });
+    if(!swapId) {
+      // fallback: just nudge rank
+      await updateDoc(myRef, { rank: myRank + dir });
+      return;
+    }
+    await Promise.all([
+      updateDoc(myRef, { rank: swapRank }),
+      updateDoc(doc(db,'events',activeEvt.id,'queue',swapId), { rank: myRank })
+    ]);
+  } catch(err) {
+    toast('Move failed','err'); console.error(err);
+  }
+}
+
+async function removeSong(sid, title) {
+  if(!confirm(`Remove "${title}" from the queue?`)) return;
+  try {
+    await deleteDoc(doc(db,'events',activeEvt.id,'queue',sid));
+    toast('Song removed');
+  } catch(err) {
+    toast('Remove failed: '+err.message,'err');
+  }
+}
 </script>
 </body>
 </html>
