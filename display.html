@@ -1,0 +1,316 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>QUEUEWAVE — Live Display</title>
+<link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;600;700;900&family=Rajdhani:wght@300;400;500;600&family=Share+Tech+Mono&display=swap" rel="stylesheet">
+<style>
+:root{--bg:#020408;--surface:#060c14;--card:#091018;--border:#0d1c30;--border2:#162840;--cyan:#00f5ff;--cyan-dim:rgba(0,245,255,0.08);--magenta:#ff00aa;--lime:#aaff00;--red:#ff3c6e;--gold:#ffcc00;--text:#c0d8f0;--muted:#2a4060;--muted2:#3a5070;}
+*{margin:0;padding:0;box-sizing:border-box;}html,body{height:100%;}
+body{background:var(--bg);color:var(--text);font-family:'Rajdhani',sans-serif;overflow:hidden;cursor:none;}
+
+/* CURSOR */
+#cur{position:fixed;width:10px;height:10px;background:var(--lime);border-radius:50%;pointer-events:none;z-index:9999;transform:translate(-50%,-50%);mix-blend-mode:screen;}
+#cur-r{position:fixed;width:32px;height:32px;border:1px solid rgba(170,255,0,0.4);border-radius:50%;pointer-events:none;z-index:9998;transform:translate(-50%,-50%);transition:transform .18s cubic-bezier(0.23,1,0.32,1);}
+
+/* GRID */
+#gc{position:fixed;inset:0;pointer-events:none;z-index:0;opacity:.22;}
+body::after{content:'';position:fixed;inset:0;background:repeating-linear-gradient(0deg,transparent,transparent 2px,rgba(0,0,0,0.04) 2px,rgba(0,0,0,0.04) 4px);pointer-events:none;z-index:900;}
+body::before{content:'';position:fixed;inset:-200%;width:400%;height:400%;background-image:url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='0.03'/%3E%3C/svg%3E");pointer-events:none;z-index:1;animation:grain .4s steps(1) infinite;}
+@keyframes grain{0%,100%{transform:translate(0,0)}20%{transform:translate(-5%,10%)}40%{transform:translate(10%,-5%)}60%{transform:translate(-8%,15%)}80%{transform:translate(12%,8%)}}
+
+/* SELECT SCREEN */
+#sel-screen{position:fixed;inset:0;display:flex;align-items:center;justify-content:center;z-index:50;background:var(--bg);}
+.sel-box{text-align:center;width:100%;max-width:440px;padding:40px 20px;}
+.brand{font-family:'Orbitron',sans-serif;font-size:clamp(2rem,7vw,3.4rem);font-weight:900;letter-spacing:.05em;margin-bottom:6px;}
+.brand .q{color:var(--lime);text-shadow:0 0 20px rgba(170,255,0,0.5);}
+.brand .w{color:var(--cyan);text-shadow:0 0 20px rgba(0,245,255,0.4);}
+.brand-tag{font-family:'Share Tech Mono',monospace;font-size:.65rem;color:var(--muted2);letter-spacing:.2em;margin-bottom:40px;}
+.sel-label{font-family:'Share Tech Mono',monospace;font-size:.62rem;color:var(--muted2);letter-spacing:.15em;text-transform:uppercase;margin-bottom:8px;display:block;text-align:left;}
+.sel-select{width:100%;padding:12px 15px;background:var(--card);border:1px solid var(--border2);border-radius:3px;color:var(--text);font-family:'Share Tech Mono',monospace;font-size:.75rem;outline:none;margin-bottom:14px;cursor:none;letter-spacing:.06em;}
+.sel-select:focus{border-color:var(--lime);}
+.sel-select option{background:var(--card);}
+.btn-launch{width:100%;padding:14px;background:linear-gradient(135deg,var(--lime),var(--cyan));color:#000;border:none;border-radius:3px;font-family:'Orbitron',sans-serif;font-weight:900;font-size:.72rem;letter-spacing:.15em;cursor:none;transition:opacity .2s,transform .2s;}
+.btn-launch:hover{opacity:.9;transform:translateY(-1px);}
+
+/* DISPLAY */
+#display{display:none;height:100vh;flex-direction:column;}
+#display.on{display:flex;}
+
+/* TOP BAR */
+.topbar{display:flex;align-items:center;justify-content:space-between;padding:0 28px;height:52px;background:rgba(2,4,8,0.92);backdrop-filter:blur(20px);border-bottom:1px solid var(--border);flex-shrink:0;position:relative;z-index:10;}
+.t-logo{font-family:'Orbitron',sans-serif;font-size:.85rem;font-weight:900;letter-spacing:.12em;}
+.t-logo .q{color:var(--lime);text-shadow:0 0 15px rgba(170,255,0,0.4);}
+.t-logo .w{color:var(--cyan);}
+.t-ev{display:flex;align-items:center;gap:8px;}
+.pip-dot{width:6px;height:6px;border-radius:50%;background:var(--lime);animation:pip 1.2s ease-in-out infinite;}
+@keyframes pip{0%,100%{opacity:1}50%{opacity:.3}}
+.t-ev-name{font-family:'Share Tech Mono',monospace;font-size:.68rem;color:var(--text);letter-spacing:.08em;}
+.t-clock{font-family:'Share Tech Mono',monospace;font-size:.68rem;color:var(--muted2);letter-spacing:.1em;}
+
+/* MAIN LAYOUT */
+.display-body{flex:1;display:grid;grid-template-columns:1.6fr 1fr 0.9fr;overflow:hidden;position:relative;z-index:10;}
+.col{display:flex;flex-direction:column;overflow:hidden;border-right:1px solid var(--border);}
+.col:last-child{border-right:none;}
+.col-head{padding:14px 18px 12px;border-bottom:1px solid var(--border);flex-shrink:0;display:flex;align-items:center;gap:8px;}
+.col-icon{width:7px;height:7px;border-radius:50%;}
+.ci-play{background:var(--lime);box-shadow:0 0 8px rgba(170,255,0,0.6);}
+.ci-q{background:var(--cyan);box-shadow:0 0 8px rgba(0,245,255,0.4);}
+.ci-d{background:var(--muted);}
+.col-title{font-family:'Orbitron',sans-serif;font-size:.65rem;font-weight:700;color:#fff;letter-spacing:.12em;}
+.col-body{flex:1;overflow-y:auto;padding:14px;}
+.col-body::-webkit-scrollbar{width:3px;}.col-body::-webkit-scrollbar-track{background:transparent;}.col-body::-webkit-scrollbar-thumb{background:var(--border2);border-radius:2px;}
+
+/* NOW PLAYING HERO */
+.np-hero{padding:16px;background:rgba(170,255,0,0.03);border:1px solid rgba(170,255,0,0.15);border-radius:6px;margin-bottom:14px;display:none;}
+.np-hero.on{display:block;}
+.np-label{font-family:'Share Tech Mono',monospace;font-size:.58rem;color:var(--lime);letter-spacing:.18em;margin-bottom:12px;display:flex;align-items:center;gap:6px;}
+.np-content{display:flex;gap:14px;align-items:center;}
+.np-art{width:80px;height:80px;border-radius:8px;object-fit:cover;background:var(--border);flex-shrink:0;box-shadow:0 0 24px rgba(170,255,0,0.2);animation:art-pulse 4s ease-in-out infinite;}
+@keyframes art-pulse{0%,100%{box-shadow:0 0 24px rgba(170,255,0,0.2);}50%{box-shadow:0 0 40px rgba(170,255,0,0.35);}}
+.np-info{flex:1;min-width:0;}
+.np-title{font-family:'Orbitron',sans-serif;font-size:clamp(.85rem,2vw,1.3rem);font-weight:900;color:#fff;line-height:1.1;margin-bottom:5px;word-break:break-word;}
+.np-artist{font-family:'Share Tech Mono',monospace;font-size:.7rem;color:var(--lime);letter-spacing:.08em;margin-bottom:10px;}
+.np-votes{display:flex;gap:10px;}
+.nv{font-family:'Share Tech Mono',monospace;font-size:.7rem;padding:4px 10px;border-radius:2px;}
+.nv-u{background:rgba(0,245,255,0.08);color:var(--cyan);border:1px solid rgba(0,245,255,0.2);}
+.nv-d{background:rgba(255,0,170,0.08);color:var(--magenta);border:1px solid rgba(255,0,170,0.15);}
+
+/* EQ BARS */
+.eq{display:flex;align-items:flex-end;gap:2px;height:18px;margin-top:8px;}
+.eq span{width:3px;border-radius:1px;background:var(--lime);display:block;animation:eq .9s ease-in-out infinite alternate;}
+.eq span:nth-child(1){height:6px;animation-delay:0s;}
+.eq span:nth-child(2){height:13px;animation-delay:.12s;}
+.eq span:nth-child(3){height:9px;animation-delay:.25s;}
+.eq span:nth-child(4){height:16px;animation-delay:.38s;}
+.eq span:nth-child(5){height:11px;animation-delay:.51s;}
+.eq span:nth-child(6){height:14px;animation-delay:.64s;}
+.eq span:nth-child(7){height:7px;animation-delay:.77s;}
+@keyframes eq{from{transform:scaleY(.3);}to{transform:scaleY(1);}}
+
+/* NOTHING PLAYING */
+.np-empty{text-align:center;padding:32px 20px;}
+.np-empty .icon{font-size:2rem;margin-bottom:8px;}
+.np-empty p{font-family:'Share Tech Mono',monospace;font-size:.62rem;color:var(--muted2);letter-spacing:.1em;}
+
+/* QUEUE / PLAYED CARDS */
+.sq{display:flex;align-items:center;gap:10px;padding:10px 12px;background:var(--card);border:1px solid var(--border);border-radius:4px;margin-bottom:6px;transition:border-color .2s;}
+.sq-rank{font-family:'Orbitron',sans-serif;font-size:.75rem;font-weight:900;color:var(--muted2);min-width:22px;text-align:center;flex-shrink:0;}
+.sq-thumb{width:38px;height:38px;border-radius:5px;object-fit:cover;background:var(--border);flex-shrink:0;}
+.sq-info{flex:1;min-width:0;}
+.sq-t{font-weight:600;font-size:.82rem;color:#fff;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;}
+.sq-a{font-family:'Share Tech Mono',monospace;font-size:.58rem;color:var(--muted2);margin-top:2px;}
+.sq-votes{display:flex;gap:6px;flex-shrink:0;}
+.sv{font-family:'Share Tech Mono',monospace;font-size:.62rem;}
+.sv-u{color:var(--cyan);}
+.sv-d{color:var(--magenta);}
+.sq.played-row{opacity:.28;}
+
+/* TICKER */
+.ticker{flex-shrink:0;height:34px;background:var(--surface);border-top:1px solid var(--border);overflow:hidden;display:flex;align-items:center;position:relative;z-index:10;}
+.ticker::before{content:'';position:absolute;left:0;top:0;bottom:0;width:60px;background:linear-gradient(90deg,var(--surface),transparent);z-index:2;}
+.ticker::after{content:'';position:absolute;right:0;top:0;bottom:0;width:60px;background:linear-gradient(270deg,var(--surface),transparent);z-index:2;}
+.ticker-track{display:flex;gap:0;animation:tick 35s linear infinite;white-space:nowrap;}
+.ticker-item{display:flex;align-items:center;gap:8px;padding:0 28px;}
+.ti-rank{font-family:'Orbitron',sans-serif;font-size:.58rem;font-weight:900;color:var(--cyan);}
+.ti-title{font-family:'Share Tech Mono',monospace;font-size:.62rem;color:var(--text);letter-spacing:.06em;}
+.ti-sep{width:4px;height:4px;border-radius:50%;background:var(--magenta);flex-shrink:0;}
+@keyframes tick{from{transform:translateX(0);}to{transform:translateX(-50%);}}
+
+/* EMPTY */
+.empty{text-align:center;padding:40px 16px;}
+.e-ico{font-size:1.8rem;margin-bottom:8px;}
+.e-msg{font-family:'Share Tech Mono',monospace;font-size:.6rem;color:var(--muted2);letter-spacing:.1em;}
+
+/* SPIN */
+.spin-w{display:flex;justify-content:center;padding:32px;}
+.spin{width:20px;height:20px;border:2px solid var(--border);border-top-color:var(--lime);border-radius:50%;animation:sp .7s linear infinite;}
+@keyframes sp{to{transform:rotate(360deg)}}
+
+/* NO OVERFLOW for display */
+@media(max-width:860px){.display-body{grid-template-columns:1fr;}.col:not(:first-child){display:none;}}
+</style>
+</head>
+<body>
+<div id="cur"></div><div id="cur-r"></div>
+<canvas id="gc"></canvas>
+
+<!-- SELECT SCREEN -->
+<div id="sel-screen">
+  <div class="sel-box">
+    <div class="brand"><span class="q">QUEUE</span><span class="w">WAVE</span></div>
+    <div class="brand-tag">// live display screen — read only</div>
+    <label class="sel-label">Select Event</label>
+    <select class="sel-select" id="evSelect"><option value="">— loading events —</option></select>
+    <button class="btn-launch" onclick="launchDisplay()">LAUNCH DISPLAY →</button>
+  </div>
+</div>
+
+<!-- DISPLAY -->
+<div id="display">
+  <div class="topbar">
+    <div class="t-logo"><span class="q">QUEUE</span><span class="w">WAVE</span></div>
+    <div class="t-ev">
+      <div class="pip-dot"></div>
+      <span class="t-ev-name" id="evName">—</span>
+    </div>
+    <div class="t-clock" id="clock">00:00:00</div>
+  </div>
+
+  <div class="display-body">
+    <!-- NOW PLAYING -->
+    <div class="col">
+      <div class="col-head"><div class="col-icon ci-play"></div><div class="col-title">NOW PLAYING</div></div>
+      <div class="col-body">
+        <div class="np-hero" id="npHero">
+          <div class="np-label"><div class="pip-dot" style="background:var(--lime)"></div> NOW PLAYING</div>
+          <div class="np-content">
+            <img class="np-art" id="npArt" src="">
+            <div class="np-info">
+              <div class="np-title" id="npTitle">—</div>
+              <div class="np-artist" id="npArtist">—</div>
+              <div class="np-votes">
+                <div class="nv nv-u" id="npUp">👍 0</div>
+                <div class="nv nv-d" id="npDown">👎 0</div>
+              </div>
+              <div class="eq"><span></span><span></span><span></span><span></span><span></span><span></span><span></span></div>
+            </div>
+          </div>
+        </div>
+        <div id="npEmpty" class="np-empty"><div class="icon">🎧</div><p>WAITING FOR THE MUSIC TO START</p></div>
+      </div>
+    </div>
+
+    <!-- UP NEXT -->
+    <div class="col">
+      <div class="col-head"><div class="col-icon ci-q"></div><div class="col-title">UP NEXT</div></div>
+      <div class="col-body" id="queueList"></div>
+    </div>
+
+    <!-- PLAYED -->
+    <div class="col">
+      <div class="col-head"><div class="col-icon ci-d"></div><div class="col-title">PLAYED</div></div>
+      <div class="col-body" id="playedList"></div>
+    </div>
+  </div>
+
+  <div class="ticker"><div class="ticker-track" id="tickerTrack"></div></div>
+</div>
+
+<script type="module">
+import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-app.js";
+import { getFirestore, collection, getDocs, onSnapshot, query, orderBy } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js";
+
+// ── PASTE YOUR FIREBASE CONFIG ──
+const firebaseConfig = {
+    apiKey: "AIzaSyAseFAn83wwnnnxTbNkLetiBDrwsrJj0AM",
+    authDomain: "dj-app-cb03f.firebaseapp.com",
+    projectId: "dj-app-cb03f",
+    storageBucket: "dj-app-cb03f.firebasestorage.app",
+    messagingSenderId: "377882282531",
+    appId: "1:377882282531:web:53565cb5e44b96b2e33f96",
+    measurementId: "G-EY08TTYJBZ"
+};
+// ────────────────────────────────
+
+const app=initializeApp(firebaseConfig),db=getFirestore(app);
+let qUnsub=null;
+
+// CURSOR
+const cur=document.getElementById('cur'),cr=document.getElementById('cur-r');
+let mx=0,my=0,rx=0,ry=0;
+document.addEventListener('mousemove',e=>{mx=e.clientX;my=e.clientY;cur.style.left=mx+'px';cur.style.top=my+'px';});
+(function ar(){rx+=(mx-rx)*.12;ry+=(my-ry)*.12;cr.style.left=rx+'px';cr.style.top=ry+'px';requestAnimationFrame(ar);})();
+
+// GRID (lime tint for display)
+const gc=document.getElementById('gc'),gx=gc.getContext('2d');
+function rsz(){gc.width=window.innerWidth;gc.height=window.innerHeight;}rsz();window.addEventListener('resize',rsz);
+let gt=0;
+(function dg(){gx.clearRect(0,0,gc.width,gc.height);const sz=60,cols=Math.ceil(gc.width/sz)+1,rows=Math.ceil(gc.height/sz)+1;const ox=(gt*.2)%sz,oy=(gt*.1)%sz;gx.lineWidth=.5;for(let x=0;x<cols;x++){const px=x*sz-ox;gx.strokeStyle=`rgba(170,255,0,${.035+Math.sin(gt*.015+x*.3)*.015})`;gx.beginPath();gx.moveTo(px,0);gx.lineTo(px,gc.height);gx.stroke();}for(let y=0;y<rows;y++){const py=y*sz-oy;gx.strokeStyle=`rgba(0,245,255,${.025+Math.sin(gt*.015+y*.4)*.01})`;gx.beginPath();gx.moveTo(0,py);gx.lineTo(gc.width,py);gx.stroke();}gt++;requestAnimationFrame(dg);})();
+
+// CLOCK
+setInterval(()=>{document.getElementById('clock').textContent=new Date().toLocaleTimeString();},1000);
+
+async function loadEventsDropdown(){
+  const sel=document.getElementById('evSelect');
+  const snap=await getDocs(collection(db,'events'));
+  const evs=[];snap.forEach(d=>evs.push({id:d.id,...d.data()}));
+  evs.sort((a,b)=>(b.createdAt?.seconds||0)-(a.createdAt?.seconds||0));
+  sel.innerHTML='<option value="">— select event —</option>';
+  evs.forEach(ev=>{const o=document.createElement('option');o.value=ev.id;o.textContent=ev.name+(ev.status==='live'?' ●':'');sel.appendChild(o);});
+  const live=evs.find(e=>e.status==='live');
+  if(live){sel.value=live.id;}
+}
+loadEventsDropdown();
+setInterval(loadEventsDropdown,30000);
+
+window.launchDisplay=()=>{
+  const sel=document.getElementById('evSelect');
+  const evId=sel.value;if(!evId)return;
+  const evNm=sel.options[sel.selectedIndex]?.text?.replace(' ●','').trim()||'—';
+  document.getElementById('sel-screen').style.display='none';
+  const disp=document.getElementById('display');disp.classList.add('on');
+  document.getElementById('evName').textContent=evNm;
+  document.title='🎧 '+evNm+' — QUEUEWAVE';
+  subQueue(evId);
+};
+
+function subQueue(evId){
+  if(qUnsub)qUnsub();
+  const q=query(collection(db,'events',evId,'queue'),orderBy('rank'));
+  qUnsub=onSnapshot(q,snap=>{
+    const all=[];snap.forEach(d=>all.push({id:d.id,...d.data()}));
+    const playing=all.filter(s=>s.status==='playing');
+    const queued=all.filter(s=>s.status==='queued');
+    const played=all.filter(s=>s.status==='played');
+    renderNow(playing);renderQueue(queued);renderPlayed(played);renderTicker(queued);
+  });
+}
+
+function renderNow(songs){
+  const hero=document.getElementById('npHero'),empty=document.getElementById('npEmpty');
+  if(!songs.length){hero.classList.remove('on');empty.style.display='block';return;}
+  const s=songs[0];hero.classList.add('on');empty.style.display='none';
+  document.getElementById('npArt').src=s.artwork||'';
+  document.getElementById('npArt').onerror=function(){this.style.background='var(--border)';};
+  document.getElementById('npTitle').textContent=s.title;
+  document.getElementById('npArtist').textContent=s.artist;
+  document.getElementById('npUp').textContent='👍 '+(s.upvotes||0);
+  document.getElementById('npDown').textContent='👎 '+(s.downvotes||0);
+}
+function renderQueue(songs){
+  const el=document.getElementById('queueList');
+  if(!songs.length){el.innerHTML='<div class="empty"><div class="e-ico">🎵</div><div class="e-msg">QUEUE EMPTY</div></div>';return;}
+  el.innerHTML='';
+  songs.forEach((s,i)=>{
+    const c=document.createElement('div');c.className='sq';
+    c.innerHTML=`<div class="sq-rank">${i+1}</div>
+      <img class="sq-thumb" src="${s.artwork||''}" loading="lazy" onerror="this.style.background='var(--border)'">
+      <div class="sq-info"><div class="sq-t">${s.title}</div><div class="sq-a">${s.artist}</div></div>
+      <div class="sq-votes"><span class="sv sv-u">👍${s.upvotes||0}</span><span class="sv sv-d">👎${s.downvotes||0}</span></div>`;
+    el.appendChild(c);
+  });
+}
+function renderPlayed(songs){
+  const el=document.getElementById('playedList');
+  if(!songs.length){el.innerHTML='<div class="empty"><div class="e-ico">🎧</div><div class="e-msg">NOTHING YET</div></div>';return;}
+  el.innerHTML='';
+  [...songs].reverse().forEach(s=>{
+    const c=document.createElement('div');c.className='sq played-row';
+    c.innerHTML=`<div class="sq-rank" style="color:var(--muted2)">✓</div>
+      <img class="sq-thumb" src="${s.artwork||''}" loading="lazy" onerror="this.style.background='var(--border)'">
+      <div class="sq-info"><div class="sq-t">${s.title}</div><div class="sq-a">${s.artist}</div></div>
+      <div class="sq-votes"><span class="sv sv-u">👍${s.upvotes||0}</span></div>`;
+    el.appendChild(c);
+  });
+}
+function renderTicker(queued){
+  const el=document.getElementById('tickerTrack');
+  if(!queued.length){el.innerHTML='';return;}
+  const items=queued.map((s,i)=>`<div class="ticker-item"><span class="ti-rank">#${i+1}</span><span class="ti-title">${s.title} — ${s.artist}</span></div><div class="ticker-item" style="padding:0 4px"><span class="ti-sep"></span></div>`).join('');
+  el.innerHTML=items+items; // double for seamless loop
+}
+</script>
+</body>
+</html>
